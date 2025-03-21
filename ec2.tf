@@ -8,41 +8,41 @@
 
 #  Create Ec2 Instance through Terraform  code
 resource "aws_instance" "this" {
-   ami = "ami-09c813fb71547fc4f" # This is our DevOps ami  id  #  each  id = 17 characters of string , it is alpha numeric format of string
-   vpc_security_group_ids = [aws_security_group.allow_tls.id]
-   instance_type = "t2.micro"
-   tags = {
+  ami                    = "ami-09c813fb71547fc4f" # This is our DevOps ami  id  #  each  id = 17 characters of string , it is alpha numeric format of string
+  vpc_security_group_ids = [aws_security_group.allow_tls.id]
+  instance_type          = "t2.micro"
+  tags = {
     #Key = Value
-    Name = "terraform-aws_instance"
+    Name    = "terraform-aws_instance"
     Purpose = "create ec2-instance through terraform code"
-   }
+  }
 
 }
 
 
 # Create Security Group through Terraform code 
 resource "aws_security_group" "allow_tls" {
-    name = "allow_tls"
-    description = "Allow TLS inbound traffic and all outbound traffic"
-    tags= {
-     Name = "allow_tls"
-    }
+  name        = "allow_tls"
+  description = "Allow TLS inbound traffic and all outbound traffic"
+  tags = {
+    Name = "allow_tls"
+  }
 
-ingress {
+  ingress {
 
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-}
+  }
 
-egress {
+  egress {
 
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-}
+  }
 
 }
 
