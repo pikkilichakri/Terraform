@@ -1,5 +1,5 @@
 resource "aws_route53_record" "expense_record" {
-    count = 3
+    count = length(var.instances)   #  use it to iterate  lists
     zone_id = var.zone_id
     name = "${var.instances[count.index]}.${var.domain_name}"  # it is interploation  means you can concat  variables with text
     type = "A"
@@ -9,7 +9,7 @@ resource "aws_route53_record" "expense_record" {
 }
 
 resource "aws_route53_record" "frontend" {
-    count = 3
+    count = length(var.instances)
     zone_id = var.zone_id
     name = "${var.domain_name}"  # it is interploation  means you can concat  variables with text
     type = "A"

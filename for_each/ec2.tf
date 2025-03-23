@@ -1,30 +1,45 @@
-# syntax:- 
-# resource "type_of_resource" "name-of-resource" {
+# To do repeatedly work in tasks , used to remove duplicate values  and it will work with set, map.
 
-#   # you can give parameters or arguments (key="value")
 
+# resource "aws_iam_user" "users" {
+#     for_each = var.user_names
+#     name = each.value
+# }
+
+# resource "aws_iam_user" "users" {
+#     count = length(var.user_names)
+#     name = var.user_names[count.index]
 # }
 
 
 #  Create Ec2 Instance through Terraform  code
 resource "aws_instance" "this" {
+  #count = 2
   ami                    = var.ami_id # This is our DevOps ami  id  #  each  id = 17 characters of string , it is alpha numeric format of string
   #vpc_security_group_ids = [aws_security_group.allow_tls_sg_ec2.id]
-  security_groups = [aws_security_group.allow_tls_sg_ec2.name]
-  instance_type          =  var.environment == "prod" ? "t3.small" : "t2.micro"
-  root_block_device {
-    volume_type = "gp3"
-    volume_size = 21
-  }
+  security_groups = [aws_security_group.allow_tls_sg_ec2_machine.name]
+#   instance_type   =  var.environment == "prod" ? "t3.small" : "t2.micro"
+  for_each = tomap({      # terraform will give us a variable called  each
+    "terraform-automation-micro1" = "t2.micro"
+    "terraform-automation-micro2" = "t3.micro"
+  })
+
+  instance_type = each.value
+  # root_block_device {
+  #   volume_type = "gp3"
+  #   volume_size = var.env == "prod" ?  20 : var.ec2_root_block_device_size
+  # }
   
-  tags = var.instance_tags
+  tags = {
+    Name = each.key
     #Key = Value
+  }
 }
 
 
 # Create Security Group through Terraform code 
-resource "aws_security_group" "allow_tls_sg_ec2" {
-  name        = "allow_tls_sg_ec2"
+resource "aws_security_group" "allow_tls_sg_ec2_machine" {
+  name        = "allow_tls_sg_ec2_machine"
   description = "Allow TLS inbound traffic and all outbound traffic"
   tags = var.sg_tags
 
