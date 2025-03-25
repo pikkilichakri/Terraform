@@ -46,14 +46,15 @@ resource "aws_security_group" "allow_tls" {
     Name = "allow_tls"
   }
 
-  ingress {
+  ingress = concat(             # concat()  it used to merge multiple lists in to a single list , it is not work with  maps , sets  ...  syntax :- concat(list1 , list2)
+    [
+      { from_port = 22, to_port = 22, protocol = "tcp", cidr_blocks = ["0.0.0.0/0"], description = " ssh open" }
+    ],
+    [
+      { from_port = 443, to_port = 443, protocol = "tcp", cidr_blocks = ["0.0.0.0/0"], description = "https open" }
+    ]
+  )
 
-    from_port   = 0
-    to_port     = 0
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "ssh open"
-  }
 
   egress {
 

@@ -23,3 +23,18 @@ output "ec2_private_dns" {
         for instance in aws_instance.this : instance.private_dns
     ]
 }
+
+output "instance_components" {
+    value = { key , value in var.instance_tags : key=> upper(value)}   # it is used to dynamically created resoures  or transforming data...
+}
+
+
+# example of transforming a list
+
+# variable "names" {
+#   default = ["frontendend", "backend", "mysql"]
+# }
+
+# output "uppercase_names" {
+#   value = [for name in var.names : upper(name)]    
+# }
